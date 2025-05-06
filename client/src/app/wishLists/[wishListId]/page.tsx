@@ -5,7 +5,6 @@ import ProductCard from "../../../components/ProductCard";
 import api from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 interface Product {
   _id: number;
   name: string;
@@ -32,7 +31,7 @@ export default function WishListCard() {
       try {
         const response = await api.get(
           `/wishLists/${wishListId}/view`
-        ); // should ideally fetch all wishlists for the user
+        ); // should ideally fetch wishlist for the user
 
         setWishListProducts(response.data.products); // assuming an array of products
         setWishListMembers(response.data.members); // assuming an array of members
@@ -45,7 +44,7 @@ export default function WishListCard() {
     };
 
     fetchWishList();
-  }, []);
+  }, [wishListId]);
 
   return (
     <div className="flex flex-col bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm w-full">
