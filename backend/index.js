@@ -3,33 +3,35 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 const app = express();
+import dotenv from "dotenv";
 
 import Product from "./models/Product.js";
 import WishList from "./models/WishList.js";
-import products from "./seeds/products.js";
+
 import User from "./models/User.js";
 // firebase imports
-import auth from "./lib/firebase.js";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  getAuth,
-} from "firebase/auth";
 
 import authenticateUser from "./middleware.js";
 
 app.use(express.json());
 app.use(cors());
 app.use(authenticateUser);
+dotenv.config();
+const Db_Url = process.env.MONGODB_URL || "mongodb://localhost:27017/yelp-camp";
+
+if (!Db_Url) {
+  console.error("❌ MONGODB_URL not found in environment variables.");
+  process.exit(1);
+}
+
 mongoose
-  .connect("mongodb://localhost:27017/mydatabase")
+  .connect(Db_Url)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log("✅ Connected to MongoDB Atlas");
   })
   .catch((err) => {
-    console.error("MongoDB connection error:", err);
+    console.error("❌ MongoDB connection error:", err);
   });
-
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -110,7 +112,7 @@ app.get("/wishLists/:wishListId/view", async (req, res) => {
   res.status(200).json(wishList);
 });
 app.get("/products", async (req, res) => {
-  const response = await Product.find({});
+  const response = await Product.find({}).populate("createdBy")
   // console.log("Products found:", response);
   if (!response) {
     return res.status(404).json({ message: "Products not found" });
@@ -213,13 +215,16 @@ app.patch(
     const { wishListId, productId } = req.params;
     const { name, price, createdBy } = req.body;
     const wishList = await WishList.findById(wishListId);
+    const firebaseUid = req.user.firebaseUid;
+    const user = await User.findOne({ firebaseUid });
+    const userId = user._id;
     if (!wishList) {
       return res.status(404).json({ message: "WishList not found" });
     }
     const newProduct = await Product.findByIdAndUpdate(productId, {
       name,
       price,
-      createdBy,
+      createdBy: userId,
     });
     if (!newProduct) {
       return res.status(404).json({ message: "Product not found" });
@@ -248,7 +253,7 @@ app.delete("/wishLists/:wishListId/products/:productId", async (req, res) => {
   // console.log("WishList found:", wishList);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });

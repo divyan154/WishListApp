@@ -104,7 +104,7 @@ export default function WishlistForm() {
                     {product.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Created By: {product.createdBy}
+                    Created By: {product.createdBy.name}
                   </p>
                   <p className="text-sm text-green-600 font-medium">
                     Price: ₹{product.price}
