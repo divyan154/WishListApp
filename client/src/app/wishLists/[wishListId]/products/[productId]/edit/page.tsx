@@ -29,7 +29,7 @@ export default function NewProductForm() {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
     await api.patch(
-      `http://localhost:3001/wishLists/${wishListId}/products/${productId}/edit`,
+      `/wishLists/${wishListId}/products/${productId}/edit`,
       formattedData
     );
     reset();

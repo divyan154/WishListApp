@@ -31,7 +31,7 @@ export default function WishListCard() {
     const fetchWishList = async () => {
       try {
         const response = await api.get(
-          `http://localhost:3001/wishLists/${wishListId}/view`
+          `/wishLists/${wishListId}/view`
         ); // should ideally fetch all wishlists for the user
 
         setWishListProducts(response.data.products); // assuming an array of products
@@ -90,7 +90,7 @@ export default function WishListCard() {
             }
             onDelete={async () => {
               await api.delete(
-                `http://localhost:3001/wishLists/${wishListId}/products/${product._id}`
+                `/wishLists/${wishListId}/products/${product._id}`
               );
               setWishListProducts((prev) =>
                 prev.filter((p) => p._id !== product._id)
@@ -116,7 +116,7 @@ export default function WishListCard() {
         <button
           onClick={async () => {
             try {
-              await api.delete(`http://localhost:3001/wishLists/${wishListId}`);
+              await api.delete(`/wishLists/${wishListId}`);
               Router.push("/wishLists");
             } catch (error) {
               console.error("Failed to delete wishlist:", error);

@@ -28,7 +28,7 @@ export default function NewProductForm() {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
     await api.post(
-      `http://localhost:3001/wishLists/${wishListId}/products/new`,
+      `/wishLists/${wishListId}/products/new`,
       formattedData
     );
     reset();

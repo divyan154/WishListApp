@@ -38,7 +38,7 @@ export default function EditWishlistForm() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const response = await api.get("http://localhost:3001/products");
+      const response = await api.get("/products");
       setProducts(response.data);
       console.log("Fetched products:", response.data);
     }
@@ -50,7 +50,7 @@ export default function EditWishlistForm() {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
     await api.patch(
-      `http://localhost:3001/wishLists/${wishListId}/edit`,
+      `/wishLists/${wishListId}/edit`,
       formattedData
     );
     reset();

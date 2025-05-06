@@ -28,7 +28,7 @@ export default function ViewProduct() {
     const fetchProduct = async () => {
       try {
         const response = await api.get(
-          `http://localhost:3001/wishLists/wishListId/products/${productId}`
+          `/wishLists/wishListId/products/${productId}`
         );
         const { data } = response;
         console.log("Fetched product:", data);
@@ -77,7 +77,7 @@ export default function ViewProduct() {
           <button
             onClick={() => {
               api.delete(
-                `http://localhost:3001/wishLists/${wishListId}/products/${productId}`
+                `/wishLists/${wishListId}/products/${productId}`
               );
               Router.push(`/wishLists/${wishListId}`);
             }}

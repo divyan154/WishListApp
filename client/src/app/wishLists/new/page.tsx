@@ -35,7 +35,7 @@ export default function WishlistForm() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const response = await api.get("http://localhost:3001/products");
+      const response = await api.get("/products");
       setProducts(response.data);
       console.log("Fetched products:", response.data);
     }
@@ -46,7 +46,7 @@ export default function WishlistForm() {
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
-    await api.post("http://localhost:3001/wishLists/new", formattedData);
+    await api.post("/wishLists/new", formattedData);
     reset();
     router.push("/wishLists");
   };

@@ -41,7 +41,7 @@ export default function RegisterPage() {
       console.log("Firebase User: in register page", user);
       console.log("Firebase ID Token in register page:", idToken);
       // 🔹 Step 3: Send to backend for MongoDB registration
-      const response = await api.post("http://localhost:3001/register", {
+      const response = await api.post("/register", {
         name: form.name,
         email: form.email,
         firebaseUid: user.uid,

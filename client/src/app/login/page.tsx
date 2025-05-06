@@ -37,7 +37,7 @@ export default function LoginPage() {
       const token = await user.getIdToken();
       localStorage.setItem("token", token);
       // 🔹 Step 3: Send to bac kend for MongoDB registration
-      const response = await api.post("http://localhost:3001/login", {
+      const response = await api.post("/login", {
         name: form.name,
         email: form.email,
         firebaseUid: user.uid,
