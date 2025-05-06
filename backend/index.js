@@ -14,7 +14,24 @@ import User from "./models/User.js";
 import authenticateUser from "./middleware.js";
 
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://your-frontend.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+
+
 app.get("/api", (req, res) => {
   res.send("Hello from the API!");
 });
