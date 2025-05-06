@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 export default function WishListCard() {
   const Router = useRouter();
   const params = useParams();
-  const { wishListId } = params as { id: string }; // Extracting the id from the URL parameters
+  const { wishListId } = params as { wishListId: string }; // Extracting the id from the URL parameters
   // console.log("Id in WishList View Page", params);
   const [wishListName, setWishListName] = useState("");
   const [wishListProducts, setWishListProducts] = useState<Product[]>([]);
@@ -24,14 +24,12 @@ export default function WishListCard() {
     []
   );
   const [wishListCreatedAt, setWishListCreatedAt] = useState<string>("");
-  const [wishListCreatedBy, setWishListCreatedBy] = useState("")
+  const [wishListCreatedBy, setWishListCreatedBy] = useState("");
 
   useEffect(() => {
     const fetchWishList = async () => {
       try {
-        const response = await api.get(
-          `/wishLists/${wishListId}/view`
-        ); // should ideally fetch wishlist for the user
+        const response = await api.get(`/wishLists/${wishListId}/view`); // should ideally fetch wishlist for the user
 
         setWishListProducts(response.data.products); // assuming an array of products
         setWishListMembers(response.data.members); // assuming an array of members
@@ -63,9 +61,7 @@ export default function WishListCard() {
         </div>
 
         <button
-          onClick={() =>
-            Router.push(`/wishLists/${wishListId}/products/new`)
-          }
+          onClick={() => Router.push(`/wishLists/${wishListId}/products/new`)}
           className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
         >
           + New Product
