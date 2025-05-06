@@ -17,8 +17,6 @@ interface WishList {
 export default function DashboardPage() {
   const [wishlists, setWishlists] = useState<WishList[]>([]);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,7 +30,7 @@ export default function DashboardPage() {
           headers: {
             Authorization: `Bearer ${token}`, // 👈 Send token in Authorization header
           },
-        }); 
+        });
 
         console.log(response.data);
         setWishlists(response.data);
@@ -52,7 +50,7 @@ export default function DashboardPage() {
           {/* Headings */}
           <div className="text-center">
             <h1 className="text-4xl font-extrabold text-gray-800">
-              Welcome, {username || "User"}
+              Welcome, {"User"}
             </h1>
             <h2 className="text-xl text-gray-600 mt-2">Your Wishlists</h2>
           </div>

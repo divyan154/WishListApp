@@ -15,6 +15,10 @@ import authenticateUser from "./middleware.js";
 
 app.use(express.json());
 app.use(cors());
+app.get("/api", (req, res) => {
+  res.send("Hello from the API!");
+});
+
 app.use(authenticateUser);
 dotenv.config();
 const Db_Url = process.env.MONGODB_URL || "mongodb://localhost:27017/yelp-camp";
@@ -112,7 +116,7 @@ app.get("/wishLists/:wishListId/view", async (req, res) => {
   res.status(200).json(wishList);
 });
 app.get("/products", async (req, res) => {
-  const response = await Product.find({}).populate("createdBy")
+  const response = await Product.find({}).populate("createdBy");
   // console.log("Products found:", response);
   if (!response) {
     return res.status(404).json({ message: "Products not found" });

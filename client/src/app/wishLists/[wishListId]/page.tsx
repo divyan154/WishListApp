@@ -8,7 +8,9 @@ import { useParams } from "next/navigation";
 interface Product {
   _id: number;
   name: string;
-  createdBy: string;
+  createdBy: {
+    name: string;
+  };
   price: number;
 }
 import { useRouter } from "next/navigation";
