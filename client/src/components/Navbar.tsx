@@ -7,16 +7,18 @@ export default function Navbar() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    
     try {
       await signOut(auth);
       localStorage.removeItem("token"); // if you're storing Firebase ID token
       router.push("/login");
-    } catch (err: any) {
-      console.error("Logout failed:", err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Logout failed:", err.message);
+      } else {
+        console.error("Logout failed due to an unknown error.");
+      }
     }
   };
-
   return (
     <nav className="p-4 shadow flex justify-between items-center">
       <h1 className="text-xl font-bold">WishApp</h1>

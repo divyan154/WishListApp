@@ -17,7 +17,7 @@ interface WishList {
 export default function DashboardPage() {
   const [wishlists, setWishlists] = useState<WishList[]>([]);
 
-  const [username, setUsername] = useState<string>("");
+
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,15 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import React from "react";
+import { useForm,  } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { useParams } from "next/navigation";
-interface Product {
-  id: number;
-  name: string;
-  createdBy: string;
-  price: number;
-}
+
 
 interface FormData {
   name: string;
@@ -23,7 +18,7 @@ export default function NewProductForm() {
   const { productId } = params as { productId: string };
   //   console.log("Id in Product Edit Page", params);
   const router = useRouter();
-  const { register, handleSubmit, control, reset } = useForm<FormData>({});
+  const { register, handleSubmit, reset } = useForm<FormData>({});
 
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };

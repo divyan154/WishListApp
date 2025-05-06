@@ -1,5 +1,5 @@
 "use client";
-import React, { use } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
@@ -13,12 +13,7 @@ export default function ViewProduct() {
   console.log("WishListId in products page ", wishListId);
   console.log("ProductId in product page", productId);
   const Router = useRouter();
-  const product = {
-    name: "Wireless Headphones",
-    createdBy: "John Doe",
-    price: 199.99,
-    addedAt: "2025-05-01",
-  };
+ 
   const [productName, setProductName] = useState("");
   const [productCreatedBy, setProductCreatedBy] = useState("");
   const [productPrice, setProductPrice] = useState(0);

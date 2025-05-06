@@ -23,7 +23,7 @@ export default function WishListCard({
   name,
   members = [],
   createdAt,
-  createdBy,
+  
 }: WishListCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 flex flex-col justify-between space-y-6 w-full max-w-sm transition hover:shadow-lg">
