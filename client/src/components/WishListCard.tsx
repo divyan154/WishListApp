@@ -5,7 +5,6 @@ import moment from "moment";
 interface Product {
   id: number;
   name: string;
-  imageUrl: string;
 }
 interface Member {
   name: string;
@@ -22,7 +21,6 @@ interface WishListCardProps {
 export default function WishListCard({
   id,
   name,
-  products = [],
   members = [],
   createdAt,
   createdBy,

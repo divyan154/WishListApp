@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "@/lib/api";
 import { useParams } from "next/navigation";
 interface Product {
   id: number;
@@ -28,7 +28,7 @@ export default function NewProductForm() {
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
-    await axios.patch(
+    await api.patch(
       `http://localhost:3001/wishLists/${wishListId}/products/${productId}/edit`,
       formattedData
     );

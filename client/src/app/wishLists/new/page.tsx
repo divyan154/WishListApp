@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "@/lib/api";
 
 interface Product {
   _id: number;
@@ -35,7 +35,7 @@ export default function WishlistForm() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const response = await axios.get("http://localhost:3001/products");
+      const response = await api.get("http://localhost:3001/products");
       setProducts(response.data);
       console.log("Fetched products:", response.data);
     }
@@ -46,7 +46,7 @@ export default function WishlistForm() {
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
-    await axios.post("http://localhost:3001/wishLists/new/1", formattedData);
+    await api.post("http://localhost:3001/wishLists/new", formattedData);
     reset();
     router.push("/wishLists");
   };
@@ -60,7 +60,7 @@ export default function WishlistForm() {
         <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
           Create New Wishlist
         </h2>
-  
+
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">
             Wishlist Name
@@ -71,7 +71,7 @@ export default function WishlistForm() {
             className="w-full border border-gray-300 rounded-xl px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-  
+
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">
             Created By
@@ -82,7 +82,7 @@ export default function WishlistForm() {
             className="w-full border border-gray-300 rounded-xl px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-  
+
         <div>
           <label className="block text-2xl font-semibold text-gray-800 mb-4 text-center">
             Select Products
@@ -114,7 +114,7 @@ export default function WishlistForm() {
             ))}
           </div>
         </div>
-  
+
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-2">
             Members
@@ -145,7 +145,7 @@ export default function WishlistForm() {
             + Add another member
           </button>
         </div>
-  
+
         <div className="pt-6">
           <button
             type="submit"
@@ -157,5 +157,4 @@ export default function WishlistForm() {
       </form>
     </div>
   );
-  
 }

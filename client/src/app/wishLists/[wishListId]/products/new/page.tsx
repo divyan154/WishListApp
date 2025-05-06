@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "@/lib/api";
 import { useParams } from "next/navigation";
 interface Product {
   id: number;
@@ -21,17 +21,13 @@ export default function NewProductForm() {
   const params = useParams();
   const { wishListId } = params as { wishListId: string }; // Extracting the id from the URL parameters
   const router = useRouter();
-  const { register, handleSubmit, control, reset } = useForm<FormData>({});
+  const { register, handleSubmit,  reset } = useForm<FormData>({});
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "members",
-  });
 
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
-    await axios.post(
+    await api.post(
       `http://localhost:3001/wishLists/${wishListId}/products/new`,
       formattedData
     );

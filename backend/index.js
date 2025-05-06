@@ -7,10 +7,20 @@ const app = express();
 import Product from "./models/Product.js";
 import WishList from "./models/WishList.js";
 import products from "./seeds/products.js";
-// import User from "./models/User.js";
+import User from "./models/User.js";
+// firebase imports
+import auth from "./lib/firebase.js";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  getAuth,
+} from "firebase/auth";
+
+import authenticateUser from "./middleware.js";
 
 app.use(express.json());
 app.use(cors());
+app.use(authenticateUser);
 mongoose
   .connect("mongodb://localhost:27017/mydatabase")
   .then(() => {
@@ -23,7 +33,55 @@ mongoose
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-app.get("/wishLists/:userId", async (req, res) => {
+app.post("/register", async (req, res) => {
+  console.log("Request to register received nowww!!!!");
+
+  const { name } = req.body;
+  const { firebaseUid, email } = req.user; // ✅ Comes from middleware
+
+  try {
+    let user = await User.findOne({ firebaseUid });
+    if (!user) {
+      user = new User({ name, email, firebaseUid });
+      await user.save();
+    }
+
+    res.status(201).json({ message: "User registered successfully", user });
+  } catch (err) {
+    console.error("Registration failed:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to register user", error: err.message });
+  }
+});
+// route.js or wherever you define routes
+
+app.post("/login", async (req, res) => {
+  console.log("Request to login received");
+  try {
+    const { firebaseUid } = req.user;
+
+    // 🔍 Check if user exists in MongoDB
+    const user = await User.findOne({ firebaseUid });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found. Please register first." });
+    }
+
+    // ✅ Return user info or any token if you issue custom ones
+    res.status(200).json({ message: "Login successful" });
+  } catch (err) {
+    console.error("Login failed:", err);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: err.message });
+  }
+});
+
+app.get("/wishLists", async (req, res) => {
+  console.log("User id in backend in get wishLists route : ", req.user);
   const WishLists = await WishList.find();
 
   res.send(WishLists);
@@ -32,8 +90,20 @@ app.get("/wishLists/:userId", async (req, res) => {
 app.get("/wishLists/:wishListId/view", async (req, res) => {
   const { wishListId } = req.params;
   // console.log("WishList id in backend: ", wishListId);
-  const wishList = await WishList.findById(wishListId).populate("products");
-  // console.log("WishList found:", wishList);
+  const wishList = await WishList.findById(wishListId)
+    .populate({
+      path: "products",
+      populate: {
+        path: "createdBy",
+        model: "User",
+        select: "name-_id", // ✅ Only populate the user's name
+      },
+    })
+    .populate({
+      path: "createdBy",
+      select: "name -_id", // Only include the name field
+    });
+  console.log("WishList found:", wishList);
   if (!wishList) {
     return res.status(404).json({ message: "WishList not found" });
   }
@@ -47,22 +117,22 @@ app.get("/products", async (req, res) => {
   }
   res.status(200).json(response);
 });
-app.post("/wishLists/new/:userId", async (req, res) => {
+app.post("/wishLists/new", async (req, res) => {
   const { name, createdBy, members: memberNames, products } = req.body;
+  const { firebaseUid } = req.user;
   // console.log("Request body in new WishList", req.body);
   // Get ObjectIds of products by name
   const productIds = products;
   const members = memberNames.map((n) => ({ name: n.name }));
-
+  const user = await User.findOne({ firebaseUid });
+  const userId = user._id;
   const newWishList = new WishList({
     name,
-    createdBy,
+    createdBy: userId,
     members,
     products: productIds,
   });
-
   await newWishList.save();
-
   res.status(201).json(newWishList);
 });
 
@@ -79,13 +149,18 @@ app.get("/wishLists/:wishListId/products", async (req, res) => {
 app.patch("/wishLists/:wishListId/edit", async (req, res) => {
   const { wishListId } = req.params;
   const { name, createdBy, members: memberNames, products } = req.body;
+  const { firebaseUid } = req.user;
+  const user = await User.findOne({ firebaseUid });
+  const userId = user._id;
   const members = memberNames.map((n) => ({ name: n.name }));
   const newWishList = await WishList.findByIdAndUpdate(wishListId, {
     name,
-    createdBy,
+    createdBy: userId,
     members,
     products,
-  }).populate("products");
+  })
+    .populate("products")
+    .populate({ path: "createdBy", select: "name -_id" });
   console.log("NewLy updated WishList", newWishList);
   res.status(200).json({ message: "WishList Successfully updated" });
   if (!newWishList) {
@@ -117,10 +192,13 @@ app.post("/wishLists/:wishListId/products/new", async (req, res) => {
     return res.status(404).json({ message: "WishList not found" });
   }
   const { name, price, createdBy } = req.body;
+  const { firebaseUid } = req.user;
+  const user = await User.findOne({ firebaseUid });
+  const userId = user._id;
   const newProduct = new Product({
     name,
     price,
-    createdBy,
+    createdBy: userId,
   });
   wishList.products.push(newProduct._id);
   await wishList.save();

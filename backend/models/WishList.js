@@ -5,23 +5,12 @@ const WishListSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // createdBy: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "User",
-  //   required: true,
-  // },
-  // members: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "User",
-  //   },
-  // ],
-  // products: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Product",
-  //   },
-  // ],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+
   members: [{ name: { type: String, required: true } }],
   products: [
     {
@@ -29,7 +18,7 @@ const WishListSchema = new mongoose.Schema({
       ref: "Product",
     },
   ],
-  createdBy: { type: String, required: true },
+
   createdAt: {
     type: Date,
     default: Date.now,

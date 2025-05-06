@@ -25,7 +25,7 @@ export default function WishListCard() {
     []
   );
   const [wishListCreatedAt, setWishListCreatedAt] = useState<string>("");
-  const [wishListCreatedBy, setWishListCreatedBy] = useState<string>("");
+  const [wishListCreatedBy, setWishListCreatedBy] = useState("")
 
   useEffect(() => {
     const fetchWishList = async () => {
@@ -38,7 +38,7 @@ export default function WishListCard() {
         setWishListMembers(response.data.members); // assuming an array of members
         setWishListName(response.data.name);
         setWishListCreatedAt(response.data.createdAt); // assuming a string date
-        setWishListCreatedBy(response.data.createdBy); // assuming a string name
+        setWishListCreatedBy(response.data.createdBy.name); // assuming a string name
       } catch (error) {
         console.error("Error fetching wishlists:", error);
       }
@@ -78,7 +78,7 @@ export default function WishListCard() {
           <ProductCard
             key={product._id}
             name={product.name}
-            createdBy={product.createdBy}
+            createdBy={product.createdBy?.name || "Unknown"}
             price={product.price}
             onView={() =>
               Router.push(`/wishLists/${wishListId}/products/${product._id}`)

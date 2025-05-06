@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter, useParams } from "next/navigation";
-import axios from "axios";
+import api from "@/lib/api";
 
 interface Product {
-  id: number;
+  _id: number;
   name: string;
   createdBy: string;
   price: number;
@@ -38,7 +38,7 @@ export default function EditWishlistForm() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const response = await axios.get("http://localhost:3001/products");
+      const response = await api.get("http://localhost:3001/products");
       setProducts(response.data);
       console.log("Fetched products:", response.data);
     }
@@ -49,7 +49,7 @@ export default function EditWishlistForm() {
   const onSubmit = async (data: FormData) => {
     const formattedData = { ...data };
     console.log("Form Submitted:", formattedData);
-    await axios.patch(
+    await api.patch(
       `http://localhost:3001/wishLists/${wishListId}/edit`,
       formattedData
     );
@@ -95,12 +95,12 @@ export default function EditWishlistForm() {
         <div className="grid grid-cols-1 gap-4">
           {products.map((product) => (
             <label
-              key={product.id}
+              key={product._id}
               className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
             >
               <input
                 type="checkbox"
-                value={product.id}
+                value={product._id}
                 {...register("products")}
                 className="mt-1 h-5 w-5 text-blue-600 focus:ring-blue-500"
               />
