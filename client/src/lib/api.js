@@ -1,8 +1,8 @@
 // lib/api.ts
 import axios from "axios";
-
+const baseUrl = process.env.NEXT_PUBLIC_API_URL|| "http://localhost:3001";
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL, // your backend URL
+  baseURL: baseUrl, // your backend URL
 });
 
 // Attach token automatically to all requests
