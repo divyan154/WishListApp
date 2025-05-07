@@ -18,17 +18,13 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://wish-list-app-uw6w.vercel.app/"
 ];
+const corsOptions = {
+  origin: ['http://localhost:3000','https://wish-list-app-uw6w.vercel.app'],
+  methods: ['GET','POST','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+};
+app.use(cors(corsOptions));
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
 
 
 
