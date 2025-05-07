@@ -16,7 +16,7 @@ import authenticateUser from "./middleware.js";
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://your-frontend.vercel.app"
+  "https://wish-list-app-uw6w.vercel.app/"
 ];
 
 app.use(cors({
