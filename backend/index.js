@@ -18,13 +18,13 @@ app.use(express.json());
 
 const corsOptions = {
   origin: [
-    'http://localhost:3000',
-    'https://wish-list-app-gamma.vercel.app',
-    'https://wish-list-app-uw6w.vercel.app'
+    "http://localhost:3000",
+    "https://wish-list-app-gamma.vercel.app",
+    "https://wish-list-app-uw6w.vercel.app",
   ],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions)); // ✅ apply CORS before routes
@@ -34,18 +34,11 @@ app.get("/", (req, res) => {
   res.send("Hello from backend");
 });
 
-
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://wish-list-app-uw6w.vercel.app/"
+  "https://wish-list-app-uw6w.vercel.app/",
 ];
-
-
-
-
-
-
 
 app.get("/api", (req, res) => {
   res.send("Hello from the API!");
@@ -291,10 +284,5 @@ app.delete("/wishLists/:wishListId/products/:productId", async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(Example app listening on port ${PORT});
+  console.log("Example app listening on port ${PORT}");
 });
-
-// */
-/*
-
-*/
