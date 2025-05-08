@@ -17,10 +17,12 @@ import authenticateUser from "./middleware.js";
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://wish-list-app-uw6w.vercel.app"
+  "https://wish-list-app-uw6w.vercel.app",
+  "https://wish-list-app-gamma.vercel.app",
+  "https://wish-list-pgxsrkc45-divyan154s-projects.vercel.app",
 ];
 const corsOptions = {
-  origin: ['http://localhost:3000','https://wish-list-app-uw6w.vercel.app'],
+  origin: allowedOrigins,
   methods: ['GET','POST','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 };
