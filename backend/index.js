@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config(); // ✅ load .env variables
+dotenv.config(); // ✅ Load .env variables
 
 import Product from "./models/Product.js";
 import WishList from "./models/WishList.js";
@@ -13,57 +13,28 @@ import authenticateUser from "./middleware.js";
 
 const app = express();
 
-// ✅ middleware order matters!
+// ✅ Apply middleware
 app.use(express.json());
 
 const corsOptions = {
   origin: [
-    "http://localhost:3000",
-    "https://wish-list-app-gamma.vercel.app",
-    "https://wish-list-app-uw6w.vercel.app",
+    'http://localhost:3000',
+    'https://wish-list-app-gamma.vercel.app',
+    'https://wish-list-app-uw6w.vercel.app',
+    'https://wish-list-akl0v9e3j-divyan154s-projects.vercel.app' // ✅ Added new frontend URL
   ],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 
-app.use(cors(corsOptions)); // ✅ apply CORS before routes
+app.use(cors(corsOptions)); // ✅ Apply CORS before routes
 
-// ✅ Example test route
+// ✅ Example root route
 app.get("/", (req, res) => {
   res.send("Hello from backend");
 });
 
-app.use(express.json());
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://wish-list-app-uw6w.vercel.app/",
-];
-
-app.get("/api", (req, res) => {
-  res.send("Hello from the API!");
-});
-
-app.use(authenticateUser);
-dotenv.config();
-const Db_Url = process.env.MONGODB_URL || "mongodb://localhost:27017/yelp-camp";
-
-if (!Db_Url) {
-  console.error("❌ MONGODB_URL not found in environment variables.");
-  process.exit(1);
-}
-
-mongoose
-  .connect(Db_Url)
-  .then(() => {
-    console.log("✅ Connected to MongoDB Atlas");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-  });
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 app.post("/register", async (req, res) => {
   console.log("Request to register received nowww!!!!");
 
