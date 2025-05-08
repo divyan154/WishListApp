@@ -1,3 +1,4 @@
+dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -16,7 +17,7 @@ import authenticateUser from "./middleware.js";
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://wish-list-app-uw6w.vercel.app/"
+  "https://wish-list-app-uw6w.vercel.app"
 ];
 const corsOptions = {
   origin: ['http://localhost:3000','https://wish-list-app-uw6w.vercel.app'],
@@ -32,8 +33,9 @@ app.get("/api", (req, res) => {
   res.send("Hello from the API!");
 });
 
-app.use(authenticateUser);
-dotenv.config();
+app.use(['/register', '/login', '/wishLists', '/products'], authenticateUser);
+
+
 const Db_Url = process.env.MONGODB_URL || "mongodb://localhost:27017/yelp-camp";
 
 if (!Db_Url) {
@@ -108,7 +110,7 @@ app.get("/wishLists", async (req, res) => {
 
 app.get("/wishLists/:wishListId/view", async (req, res) => {
   const { wishListId } = req.params;
-  // console.log("WishList id in backend: ", wishListId);
+ 
   const wishList = await WishList.findById(wishListId)
     .populate({
       path: "products",
@@ -139,8 +141,7 @@ app.get("/products", async (req, res) => {
 app.post("/wishLists/new", async (req, res) => {
   const { name, createdBy, members: memberNames, products } = req.body;
   const { firebaseUid } = req.user;
-  // console.log("Request body in new WishList", req.body);
-  // Get ObjectIds of products by name
+  
   const productIds = products;
   const members = memberNames.map((n) => ({ name: n.name }));
   const user = await User.findOne({ firebaseUid });
@@ -158,7 +159,7 @@ app.post("/wishLists/new", async (req, res) => {
 app.get("/wishLists/:wishListId/products", async (req, res) => {
   const wishListId = req.params.wishListId;
   const wishList = await WishList.findById(wishListId).populate("products");
-  // console.log("WishList found:", wishList);
+ 
   const products = wishList.products;
   if (!products) {
     return res.status(404).json({ message: "Products not found" });
@@ -181,10 +182,11 @@ app.patch("/wishLists/:wishListId/edit", async (req, res) => {
     .populate("products")
     .populate({ path: "createdBy", select: "name -_id" });
   console.log("NewLy updated WishList", newWishList);
-  res.status(200).json({ message: "WishList Successfully updated" });
+ 
   if (!newWishList) {
     return res.status(404).json({ message: "WishList not found" });
   }
+  res.status(200).json({ message: "WishList Successfully updated" });
 });
 app.delete("/wishLists/:wishListId", async (req, res) => {
   const { wishListId } = req.params;
